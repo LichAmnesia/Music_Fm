@@ -29,18 +29,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
     This is my JSP page. <br>
-     <table border="1" width="360">
- <%
-                                String[] books = listen.books;
-                                 for (String book : books)
-                                 {
-                                 %>
-                                 <tr>
-                                    <td>书名：</td>
-                                    <td><%=book%></td>
-                                 </tr>
-                                 <%}%>
-                                 </table>
+     
      <table border="1" width="360">
         
         <tr>
