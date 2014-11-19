@@ -1,5 +1,7 @@
 package listen;
-
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.io.IOException;
 import java.util.List;
 
@@ -11,27 +13,16 @@ import javax.servlet.jsp.JspWriter;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.mapping.Set;
 
 public class listen {
 	private String userName;
-	private Integer userId;
 	public List<Listen> list;
-	public String[] books = 
-
-            new String[]{
-
-            "Spring2.0宝典" ,
-
-            "轻量级J2EE企业应用实战",
-
-            "基于J2EE的Ajax宝典",
-
-            "Struts,Spring,Hibernate整合开发"
-
-         };
-
+	public Map<String,String> ma = new HashMap<String,String>();
+	private Customer res;
+	
 	public Boolean find(){
-		Customer res = null;
+		res = null;
 		
 		Session session = MySessionFactory.getSession();
 		session.beginTransaction();
@@ -41,11 +32,22 @@ public class listen {
 	    @SuppressWarnings("unchecked")
 		List<Customer> lis = criteria.list();
 		if ( !lis.isEmpty() )  res = lis.get(0); 
-		userId = res.getUserid();
-		session.getTransaction().commit();
-		session.close();
-		if ( res==null ) return false;
-		else return true;
+		
+		
+		if ( res==null ) {
+			session.getTransaction().commit();
+			session.close();
+			return false;
+		}else {
+			Iterator it = res.getListens().iterator();
+			while (it.hasNext()){
+				Listen listit = (Listen)it.next();
+				ma.put(listit.getMusic().getMusicname().toString(),listit.getMusic().getSingerid().toString());
+			}
+			session.getTransaction().commit();
+			session.close();
+			return true;
+		}
 	}
 	
 	public List<Listen> getListenlist(){
@@ -53,33 +55,19 @@ public class listen {
 	}
 	
 	
-	public String solve(String userName,JspWriter out) throws IOException{
+	public String solve(String userName){
 		this.userName = userName;
 		if (!find()) {
 			String message="您还没有登录";
 			return message;
 		}else {
-			
-			String message = "hello";
-//        	message += "<tr>\n"
-//					+ "<td>1</td><td>Mark</td><td>Otto</td>\n"
-//					+ "</tr>\n";
-//        	message += "</tbody></table>";
-//        	out.print(message);
-			Listen res = null;
-			Session session = MySessionFactory.getSession();
-			session.beginTransaction();
-				
-			org.hibernate.Criteria criteria = session.createCriteria(Listen.class);
-		    criteria.add(Restrictions.eq("userid",userId));
-		    @SuppressWarnings("unchecked")
-			List<Listen> lis = criteria.list();
-		    this.list = lis;
-			session.getTransaction().commit();
-			session.close();
-			
-			
-			return message;
+//			Iterator it = res.getListens().iterator();
+//			
+//			while (it.hasNext()){
+//				Listen listit = (Listen)it.next();
+//				ma.put(listit.getMusic().getMusicname().toString(),listit.getMusic().getSingerid().toString());
+//			}
+			return "hello";
 		}
 	}
 }

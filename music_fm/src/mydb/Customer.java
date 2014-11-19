@@ -16,9 +16,9 @@ public class Customer implements java.io.Serializable {
 	private String username;
 	private String usersex;
 	private String useremail;
-	private Set messages = new HashSet(0);
-	private Set listens = new HashSet(0);
-	private Set songcollections = new HashSet(0);
+	private Set messages;
+	private Set listens;
+	private Set songcollections;
 
 	// Constructors
 
